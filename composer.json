@@ -1,0 +1,23 @@
+{
+    "name": "escort/composer",
+    "description": "telegram canal",
+    "authors": [
+        {
+            "name": "Vladislav Rafeenko",
+            "email": "rafeenkovlad@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/events": "^8.56"
+    },
+	"autoload": {
+      "files": [
+        "app/config/loaders.php",
+        "key.php"
+        	],
+      "psr-4": {
+        "Connect\\": "connect",
+        "Command\\": "commands"
+      }
+    }
+}
