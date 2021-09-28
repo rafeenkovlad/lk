@@ -49,4 +49,37 @@ function load()
             $table->timestamps();
         });
     }*/
+    if (!Capsule::schema()->hasTable('ancets')) {
+        Capsule::schema()->create('ancets', function ($table){
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unique();
+            $table->string('name')->nullable();
+            $table->string('city')->nullable();
+            $table->text('about')->nullable();
+            $table->string('price')->nullable();
+            $table->string('contact')->nullable();
+            $table->integer('status')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    if (!Capsule::schema()->hasTable('cities')) {
+        Capsule::schema()->create('cities', function($table){
+            $table->bigIncrements('id');
+            $table->bigInteger('telegram_id')->unique();
+            $table->string('city')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    if (!Capsule::schema()->hasTable('ancetimgs')) {
+        Capsule::schema()->create('ancetimgs', function($table){
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unique();
+            $table->string('img', 2000)->nullable();
+            $table->integer('count_img')->nullable();
+            $table->timestamps();
+        });
+    }
+
 }

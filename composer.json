@@ -3,11 +3,12 @@
     "description": "telegram canal",
     "authors": [
         {
-            "name": "Vladislav Rafeenko",
-            "email": "rafeenkovlad@gmail.com"
+            "name": "TelegramEs",
+            "email": "telegram@gmail.com"
         }
     ],
     "require": {
+	"illuminate/database": "^8",
         "illuminate/events": "^8.56"
     },
 	"autoload": {
@@ -17,7 +18,13 @@
         	],
       "psr-4": {
         "Connect\\": "connect",
-        "Command\\": "commands"
-      }
+        "Command\\": "commands",
+	"Command\\Tree_ancet\\": "commands/tree_ancet",
+	"App\\": "app"
+      },
+        "files": [
+          "app/config/loaders.php",
+          "app/config/schema.php"
+        ]
     }
 }

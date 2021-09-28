@@ -4,12 +4,15 @@ use App\Models\Ancet;
 use Command\Keyboard;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Carbon;
 
 class Ancets extends Ancet
 {
-    public function setId($id)
+    public function setId($id, $city)
     {
+        //file_put_contents(__DIR__ . '/message.txt', print_r($city, true));
         $ancet = new Ancet(['user_id' => $id]);
+        $ancet->city = $city;
         $savedAncet = &$ancet->save();
 
         $objAncet = Ancet::where('user_id', $id)->take(1)->get();
@@ -64,7 +67,7 @@ class Ancets extends Ancet
 
         $price = json_decode('"'.$price.'"');
 
-        $price = Str::words($price, 25);
+        $price = Str::words($price, 45);
         //поиск описания
         $ancet = Ancet::where('user_id', $user_id)->get();
         $issetPrice = ($ancet[0]->original['user_id'] == $user_id) ? $ancet[0]->original['price'] : false;
@@ -170,5 +173,39 @@ class Ancets extends Ancet
          * Обнуляем альбом
          */
         return $imgObject->update(['img'=> null, 'count_img' => null]);
+    }
+
+    public function statusAncet($user_id)
+    {
+        /*
+         * Полностью ли заполнена анкета
+         */
+        $ancet = Ancet::select('user_id', 'city', 'name', 'about', 'price', 'contact', 'updated_at')->where('user_id', $user_id)->get();
+
+        $atributes = $ancet[0]->attributes;
+
+        $emptyIsset = array_filter($atributes, function($value, $key){
+            if(is_null($value)) return $key;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        if(in_array(NULL, $emptyIsset)) return false;
+
+        /*
+         * Модерация времени с момента поднятия
+         */
+        $timeNow = Carbon::now();
+        $timeLast = $atributes['updated_at'];
+
+        $diff = $timeNow->diffInMinutes($timeLast);
+        if($diff<60) return false;
+        //file_put_contents(__DIR__ . '/message.txt', print_r($diff , true));
+        /*
+         * получить кнопку активности
+         */
+        return Keyboard::Online($user_id);
+
+
+
+
     }
 }

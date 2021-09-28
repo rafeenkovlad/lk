@@ -22,14 +22,16 @@ class Tree extends City
             //вставляем id Unsigned в Ancets
             if($saved) {
                 $result = new Ancets();
-                $result->setId($user->original['telegram_id']);
+                $result->setId($user->original['telegram_id'], $user->original['city']);
             }
             return $result;
             //вызов дальнейшего действия
 
         }
 
-        $result = &City::where('telegram_id', $id)
+        $result = City::where('telegram_id', $id)
+            ->update(['city' => $city]);
+        Ancets::where('user_id', $id)
             ->update(['city' => $city]);
         return $result;
 
@@ -53,6 +55,11 @@ class Tree extends City
     public function setEmptyCommand($id)
     {
         file_put_contents(__DIR__ .'/commandtxt/'.$id.'.txt', print_r(null, true));
+    }
+
+    public function delLastbutton()
+    {
+
     }
 
     /*public static function regularTree($id, $data)
